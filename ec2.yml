@@ -1,0 +1,11 @@
+ - hosts: localhost
+   tasks:
+    - name: creating an ec2 instance
+      ec2:
+        keypair: aws
+        image: ami-06fcc1f0bc2c8943f
+        instance_type: t2.micro
+        region: us-west-1
+        wait: yes
+        count: 1
+
