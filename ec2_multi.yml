@@ -1,0 +1,35 @@
+- name: Create a sample instance
+  hosts: localhost
+  gather_facts: False
+  vars:
+    keypair: aws
+    instance_type: t2.micro
+    security_group:  awsansi
+    image: ami-06fcc1f0bc2c8943f
+    region: us-west-1
+  tasks:
+    - name: Launch instance
+      ec2:
+         key_name: "{{ keypair }}"
+         group: "{{ security_group }}"
+         instance_type: "{{ instance_type }}"
+         image: "{{ image }}"
+         wait: true
+         region: "{{ region }}"
+         vpc_subnet_id: subnet-99f0f6c2
+         assign_public_ip: yes
+      register: ec2
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: launched
+      loop: "{{ ec2.instances }}"
+
+
+    - name: Terminate instances that were previously launched
+      ec2:
+        state: 'absent'
+        instance_ids: '{{ ec2.instance_ids }}'
+        region: "{{ region }}"
+
