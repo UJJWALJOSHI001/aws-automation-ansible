@@ -3,10 +3,10 @@
    tasks:
     - name: Creating a Security Group
       ec2_group:
-        name: aws_ansible
+        name: awsansi
         description: from ansible
-        vpc_id: "{{ vpc }}"
-        region: "{{ region }}"
+        vpc_id: vpc-d9a992be
+        region: us-west-1
         rules:
          - proto: tcp
            from_port: 22
